@@ -52,7 +52,7 @@ Pterodactyl Egg tổng quát cho Python — hỗ trợ chạy ứng dụng Pytho
 
 | Biến | Mô tả | Mặc định |
 |------|-------|----------|
-| `PY_FILE` | File Python khởi động ứng dụng | `app.py` |
+| `PY_FILE` | File Python khởi động ứng dụng | `main.py` |
 | `PY_PACKAGES` | Package Python bổ sung (cách nhau bằng dấu cách) | _(trống)_ |
 | `REQUIREMENTS_FILE` | Tên file requirements | `requirements.txt` |
 | `GIT_ADDRESS` | URL Git repo cần clone | _(trống)_ |
@@ -76,4 +76,3 @@ if [[ -f /home/container/${REQUIREMENTS_FILE} ]]; then pip install -U --prefix .
 ## Giấy phép
 
 Dự án này được cấp phép theo [MIT License](LICENSE).  
-Docker image dựa trên công việc gốc của [Matthew Penner](https://github.com/matthewpi) từ [pterodactyl/yolks](https://github.com/pterodactyl/yolks).
