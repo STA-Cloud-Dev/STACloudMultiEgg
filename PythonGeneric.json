@@ -6,7 +6,7 @@
     },
     "exported_at": "2026-02-28T00:00:00+00:00",
     "name": "Python Generic",
-    "author": "admin@stacloud.vn",
+    "author": "congdongamazon@gmail.com",
     "uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     "description": "Python Generic Egg cho STACloud — hỗ trợ nhiều phiên bản Python từ 2.7 đến 3.14, chạy ứng dụng Python từ Git repo hoặc file upload.",
     "features": null,
@@ -78,10 +78,10 @@
             "field_type": "text"
         },
         {
-            "name": "App py file",
+            "name": "Main py file",
             "description": "The file that starts the App.",
             "env_variable": "PY_FILE",
-            "default_value": "app.py",
+            "default_value": "main.py",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string",
