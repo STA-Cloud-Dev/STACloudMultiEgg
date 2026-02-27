@@ -55,4 +55,4 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            ghcr.io/${{ steps.registry.outputs.owner_lower }}/publicdork:python_${{ matrix.tag }}
+            ghcr.io/${{ steps.registry.outputs.owner_lower }}/yolks:python_${{ matrix.tag }}
