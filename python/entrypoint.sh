@@ -24,4 +24,4 @@ PARSED=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g' | envsubst)
 # from the container itself.
 printf "\033[1m\033[33mstacloud@trolyamazon~ \033[0m%s\n" "$PARSED"
 # shellcheck disable=SC2086
-exec /bin/bash -c "${PARSED}"
+exec /bin/bash -c "exec ${PARSED}"
