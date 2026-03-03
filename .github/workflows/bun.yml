@@ -23,24 +23,29 @@ jobs:
           - canary
     steps:
       - uses: actions/checkout@v4
+      - name: Set registry prefix (lowercase)
+        id: registry
+        run: echo "owner_lower=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      # Setup QEMU for ARM64 Build
       - uses: docker/setup-qemu-action@v3
+        with:
+            image: tonistiigi/binfmt:qemu-v7.0.0-28
       - uses: docker/setup-buildx-action@v3
         with:
           buildkitd-flags: --debug
-      - id: lower-repo
-        name: Repository to lowercase
-        run: |
-          echo "repository=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_OUTPUT
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ steps.lower-repo.outputs.repository }}
-          password: ${{ secrets.REGISTRY_TOKEN != '' && secrets.REGISTRY_TOKEN || secrets.GITHUB_TOKEN }}
+          username: ${{ steps.registry.outputs.owner_lower }}
+          # Use USER_TOKEN (PAT with write:packages) for org push; fallback to GITHUB_TOKEN
+          password: ${{ secrets.USER_TOKEN != '' && secrets.USER_TOKEN || secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
         with:
           context: ./bun
           file: ./bun/${{ matrix.tag }}/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64, linux/arm64
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
-            ghcr.io/${{ steps.lower-repo.outputs.repository }}/yolks:bun_${{ matrix.tag }}
+            ghcr.io/${{ steps.registry.outputs.owner_lower }}/yolks:bun_${{ matrix.tag }}
