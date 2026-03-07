@@ -1,0 +1,114 @@
+{
+    "_comment": "KHÔNG CHỈNH SỬA: TỆP ĐƯỢC TẠO TỰ ĐỘNG BỞI PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "exported_at": "",
+    "name": "STACloud MultiEgg",
+    "author": "admin@stacloud.vn",
+    "description": "MultiEgg cho STACloud",
+    "images": [
+        "ghcr.io/sunshroomchan/sta-multiegg:latest",
+        "ghcr.io/sunshroomchan/sta-multiegg:sha-3c6e996"
+    ],
+    "file_denylist": [
+        "server-icon.png"
+    ],
+    "startup": "bash /opt/stacloud/t.sh",
+    "config": {
+        "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Done\",\r\n    \"userInteraction\": [\r\n        \"Go to eula.txt for more info.\"\r\n    ]\r\n}",
+        "logs": "{\r\n    \"custom\": false,\r\n    \"location\": \"logs/latest.log\"\r\n}",
+        "stop": "stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\r\n# Script cài đặt cho STACloud MultiEgg\r\n# Thư mục server: /mnt/server\r\n\r\ncd /mnt/server\r\n\r\necho \"Hoàn tất bước cài đặt cơ bản.\"",
+            "container": "debian:bookworm-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Bật menu chọn game (Console)",
+            "description": "1 = bật menu chọn game khi start server (giống ảnh). 0 = tắt menu và chạy theo SERVER_FLAVOR/SERVER_TYPE nếu có.",
+            "env_variable": "MULTIEGG_INTERACTIVE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Phiên bản Minecraft",
+            "description": "Phiên bản Minecraft cần tải.\r\n\r\nĐể latest để luôn lấy bản mới nhất. Nếu nhập sai sẽ tự chuyển về latest.",
+            "env_variable": "MINECRAFT_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Tên file Server Jar",
+            "description": "Tên file jar dùng để chạy server.",
+            "env_variable": "SERVER_JARFILE",
+            "default_value": "server.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Đường dẫn tải xuống",
+            "description": "URL dùng để tải server.jar thay cho script cài đặt mặc định. Biến này không hiển thị cho người dùng.",
+            "env_variable": "DL_PATH",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Số build",
+            "description": "Số build cho bản phát hành Paper.\r\n\r\nĐể latest để luôn lấy build mới nhất. Nếu nhập sai sẽ tự chuyển về latest.",
+            "env_variable": "BUILD_NUMBER",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Tham số Java",
+            "description": "Tham số Java khi khởi chạy. Mặc định cho server mới là java -jar ${SERVER_JARFILE}.",
+            "env_variable": "JAVA_ARGUMENTS",
+            "default_value": "-jar ${SERVER_JARFILE}",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:500",
+            "field_type": "text"
+        },
+        {
+            "name": "Phiên bản Minecraft Bedrock",
+            "description": "Dùng cho lựa chọn Minecraft BDS.\r\n- stable/latest: bản stable mới nhất\r\n- preview: bản preview mới nhất\r\n- hoặc nhập số version cụ thể (ví dụ 1.26.2.1)",
+            "env_variable": "BEDROCK_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:30",
+            "field_type": "text"
+        },
+        {
+            "name": "Bedrock Versions Base URL",
+            "description": "Base URL metadata BDS, mặc định dùng Bedrock-OSS/BDS-Versions. Thường không cần đổi.",
+            "env_variable": "BEDROCK_VERSIONS_BASE_URL",
+            "default_value": "https://raw.githubusercontent.com/Bedrock-OSS/BDS-Versions/main",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "nullable|string|max:200",
+            "field_type": "text"
+        }
+    ]
+}
