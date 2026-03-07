@@ -2,9 +2,9 @@
 
 Bộ sưu tập Docker image dành cho hệ thống Egg của Pterodactyl, được xây dựng và duy trì bởi **STACloud**. Mỗi image được rebuild định kỳ để đảm bảo các dependencies luôn được cập nhật mới nhất.
 
-Các image được host trên `ghcr.io` tại namespace `trolyamazon/yolks`. Logic phân loại image như sau:
+Các image được host trên `ghcr.io` tại namespace `sta-cloud-dev/deverlopment`. Logic phân loại image như sau:
 
-- **yolks** — các image tổng quát cho phép nhiều loại ứng dụng hoặc script chạy được. Thường là một phiên bản cụ thể của một phần mềm (ví dụ: Python), giúp các Egg trong Pterodactyl có thể hoán đổi runtime linh hoạt.
+- **Deverlopment** — các image tổng quát cho phép nhiều loại ứng dụng hoặc script chạy được. Thường là một phiên bản cụ thể của một phần mềm (ví dụ: Python), giúp các Egg trong Pterodactyl có thể hoán đổi runtime linh hoạt.
 
 Tất cả image hỗ trợ cả `linux/amd64` và `linux/arm64`. Để sử dụng trên hệ thống arm64, không cần chỉnh sửa gì — dùng tag như bình thường là được.
 
@@ -22,22 +22,22 @@ Khi thêm một phiên bản mới vào image có sẵn (ví dụ: python 3.15),
 
 | Phiên bản | Image | Trạng thái |
 |-----------|-------|------------|
-| Python 2.7 | `ghcr.io/trolyamazon/yolks:python_2.7` | End-of-Life (EOL) |
-| Python 3.7 | `ghcr.io/trolyamazon/yolks:python_3.7` | End-of-Life (EOL) |
-| Python 3.8 | `ghcr.io/trolyamazon/yolks:python_3.8` | End-of-Life (EOL) |
-| Python 3.9 | `ghcr.io/trolyamazon/yolks:python_3.9` | Chỉ vá bảo mật |
-| Python 3.10 | `ghcr.io/trolyamazon/yolks:python_3.10` | Chỉ vá bảo mật |
-| Python 3.11 | `ghcr.io/trolyamazon/yolks:python_3.11` | Đang hỗ trợ |
-| Python 3.12 | `ghcr.io/trolyamazon/yolks:python_3.12` | Đang hỗ trợ |
-| Python 3.13 | `ghcr.io/trolyamazon/yolks:python_3.13` | Đang hỗ trợ |
-| Python 3.14 | `ghcr.io/trolyamazon/yolks:python_3.14` | Pre-release |
+| Python 2.7 | `ghcr.io/sta-cloud-dev/deverlopment:python_2.7` | End-of-Life (EOL) |
+| Python 3.7 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.7` | End-of-Life (EOL) |
+| Python 3.8 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.8` | End-of-Life (EOL) |
+| Python 3.9 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.9` | Chỉ vá bảo mật |
+| Python 3.10 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.10` | Chỉ vá bảo mật |
+| Python 3.11 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.11` | Đang hỗ trợ |
+| Python 3.12 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.12` | Đang hỗ trợ |
+| Python 3.13 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.13` | Đang hỗ trợ |
+| Python 3.14 | `ghcr.io/sta-cloud-dev/deverlopment:python_3.14` | Pre-release |
 
 ### [Bun](bun)
 
 | Phiên bản | Image | Trạng thái |
 |-----------|-------|------------|
-| Bun Latest | `ghcr.io/trolyamazon/yolks:bun_latest` | Đang hỗ trợ |
-| Bun Canary | `ghcr.io/trolyamazon/yolks:bun_canary` | Canary (không ổn định) |
+| Bun Latest | `ghcr.io/sta-cloud-dev/deverlopment:bun_latest` | Đang hỗ trợ |
+| Bun Canary | `ghcr.io/sta-cloud-dev/deverlopment:bun_canary` | Canary (không ổn định) |
 
 ---
 

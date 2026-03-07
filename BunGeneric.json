@@ -11,8 +11,8 @@
     "description": "Bun Generic Egg cho STACloud — hỗ trợ Bun latest và canary, chạy ứng dụng JavaScript/TypeScript từ Git repo hoặc file upload.",
     "features": null,
     "docker_images": {
-        "Bun Latest": "ghcr.io/trolyamazon/yolks:bun_latest",
-        "Bun Canary": "ghcr.io/trolyamazon/yolks:bun_canary"
+        "Bun Latest": "ghcr.io/sta-cloud-dev/deverlopment:bun_latest",
+        "Bun Canary": "ghcr.io/sta-cloud-dev/deverlopment:bun_canary"
     },
     "file_denylist": [],
     "startup": "if [[ -d .git ]] && [[ \"{{AUTO_UPDATE}}\" == \"1\" ]]; then git pull; fi; if [ -f package.json ]; then bun install; fi; bun run \"{{MAIN_FILE}}\"",
@@ -32,7 +32,7 @@
     "variables": [
         {
             "name": "Git Repo Address",
-            "description": "Git repo to clone\r\n\r\nI.E. https://github.com/trolyamazon/repo_name",
+            "description": "Git repo to clone\r\n\r\nI.E. https://github.com/STA-Cloud-Dev/repo_name",
             "env_variable": "GIT_ADDRESS",
             "default_value": "",
             "user_viewable": true,

@@ -12,7 +12,7 @@ export INTERNAL_IP
 cd /home/container || exit 1
 
 # Print Bun version
-printf "\033[1m\033[33mstacloud@trolyamazon~ \033[0mbun --version\n"
+printf "\033[1m\033[33mstacloud@deverlopment~ \033[0mbun --version\n"
 bun --version
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
@@ -22,6 +22,6 @@ PARSED=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g' | envsubst)
 
 # Display the command we're running in the output, and then execute it with the env
 # from the container itself.
-printf "\033[1m\033[33mstacloud@trolyamazon~ \033[0m%s\n" "$PARSED"
+printf "\033[1m\033[33mstacloud@deverlopment~ \033[0m%s\n" "$PARSED"
 # shellcheck disable=SC2086
 exec /bin/bash -c "${PARSED}"

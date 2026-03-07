@@ -2,9 +2,9 @@
 
 FROM        --platform=$TARGETOS/$TARGETARCH oven/bun:latest
 
-LABEL       author="trolyamazon" maintainer="congdongamazon@gmail.com"
+LABEL       author="STACloud" maintainer="congdongamazon@gmail.com"
 
-LABEL       org.opencontainers.image.source="https://github.com/trolyamazon/yolks"
+LABEL       org.opencontainers.image.source="https://github.com/STA-Cloud-Dev/STACloudMultiEgg"
 LABEL       org.opencontainers.image.licenses=MIT
 
 RUN         apt-get update -y \

@@ -2,9 +2,9 @@
 
 FROM        --platform=$TARGETOS/$TARGETARCH python:3.11-alpine
 
-LABEL       author="trolyamazon" maintainer="congdongamazon@gmail.com"
+LABEL       author="STACloud" maintainer="congdongamazon@gmail.com"
 
-LABEL       org.opencontainers.image.source="https://github.com/trolyamazon/yolks"
+LABEL       org.opencontainers.image.source="https://github.com/STA-Cloud-Dev/STACloudMultiEgg"
 LABEL       org.opencontainers.image.licenses=MIT
 
 RUN         apk add --update --no-cache bash cmake make ca-certificates curl ffmpeg g++ gcc gettext git openssl sqlite tar tzdata \
