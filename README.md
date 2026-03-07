@@ -39,6 +39,25 @@ Khi thêm một phiên bản mới vào image có sẵn (ví dụ: python 3.15),
 | Bun Latest | `ghcr.io/sta-cloud-dev/deverlopment:bun_latest` | Đang hỗ trợ |
 | Bun Canary | `ghcr.io/sta-cloud-dev/deverlopment:bun_canary` | Canary (không ổn định) |
 
+### Java
+
+| Phiên bản | Image | Trạng thái |
+|-----------|-------|------------|
+| Java 8 | `ghcr.io/sta-cloud-dev/deverlopment:java_8` | Đang hỗ trợ |
+| Java 8 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_8j9` | Đang hỗ trợ |
+| Java 11 | `ghcr.io/sta-cloud-dev/deverlopment:java_11` | Đang hỗ trợ |
+| Java 11 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_11j9` | Đang hỗ trợ |
+| Java 16 | `ghcr.io/sta-cloud-dev/deverlopment:java_16` | Đang hỗ trợ |
+| Java 16 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_16j9` | Đang hỗ trợ |
+| Java 17 | `ghcr.io/sta-cloud-dev/deverlopment:java_17` | Đang hỗ trợ |
+| Java 18 | `ghcr.io/sta-cloud-dev/deverlopment:java_18` | Đang hỗ trợ |
+| Java 18 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_18j9` | Đang hỗ trợ |
+| Java 19 | `ghcr.io/sta-cloud-dev/deverlopment:java_19` | Đang hỗ trợ |
+| Java 19 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_19j9` | Đang hỗ trợ |
+| Java 21 | `ghcr.io/sta-cloud-dev/deverlopment:java_21` | Đang hỗ trợ |
+| Java 21 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_21j9` | Đang hỗ trợ |
+| Java 25 | `ghcr.io/sta-cloud-dev/deverlopment:java_25` | Đang hỗ trợ |
+
 ---
 
 ## Egg Generic
@@ -110,6 +129,30 @@ Pterodactyl Egg tổng quát cho Bun — hỗ trợ chạy ứng dụng JavaScri
 if [[ -d .git ]] && [[ "{{AUTO_UPDATE}}" == "1" ]]; then git pull; fi
 if [ -f package.json ]; then bun install; fi
 bun run "{{MAIN_FILE}}"
+```
+
+---
+
+### Java
+
+Pterodactyl Egg tổng quát cho Java — hỗ trợ chạy ứng dụng Java từ file JAR với nhiều phiên bản runtime khác nhau (8, 11, 16, 18, 19, 21, 25).
+
+#### Cách import Egg
+
+1. Đăng nhập vào **Admin Panel** của Pterodactyl.
+2. Vào **Nests** → chọn hoặc tạo một Nest mới.
+3. Nhấn **Import Egg** và upload file `JavaGeneric.json`.
+
+#### Biến môi trường
+
+| Biến | Mô tả | Mặc định |
+|------|-------|----------|
+| `JARFILE` | Tên file JAR cần chạy | `server.jar` |
+
+#### Lệnh khởi động mặc định
+
+```bash
+java -Dterminal.jline=false -Dterminal.ansi=true -jar {{JARFILE}}
 ```
 
 ---
