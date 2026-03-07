@@ -20,15 +20,11 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Set registry prefix (lowercase)
-        id: registry
-        run: echo "owner_lower=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log in to GitHub Container Registry (retry 3 lần)
         env:
-          GHCR_USERNAME: ${{ steps.registry.outputs.owner_lower }}
+          GHCR_USERNAME: ${{ github.actor }}
           GHCR_TOKEN: ${{ secrets.USER_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           for attempt in 1 2 3; do
@@ -47,7 +43,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ steps.registry.outputs.owner_lower }}/stacloud-premium
+          images: ghcr.io/trolyamazon/stacloud-premium
           tags: |
             type=ref,event=branch
             type=ref,event=tag
