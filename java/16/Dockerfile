@@ -1,4 +1,4 @@
-FROM        --platform=$TARGETOS/$TARGETARCH eclipse-temurin:16-jre-focal
+FROM        --platform=$TARGETOS/$TARGETARCH eclipse-temurin:16-jdk
 
 LABEL       author="STACloud" maintainer="congdongamazon@gmail.com"
 
