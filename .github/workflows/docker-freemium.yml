@@ -1,12 +1,12 @@
-name: build docker premium
-run-name: "Build Docker Premium - ${{ github.event.head_commit.message || github.ref_name }}"
+name: build docker freemium
+run-name: "Build Docker Freemium - ${{ github.event.head_commit.message || github.ref_name }}"
 
 on:
   workflow_dispatch:
 
 jobs:
   push:
-    name: stacloud-premium
+    name: stacloud-freemium
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,7 +37,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ steps.registry.outputs.owner_lower }}/stacloud-premium
+          images: ghcr.io/${{ steps.registry.outputs.owner_lower }}/stacloud-freemium
           tags: |
             type=ref,event=branch
             type=ref,event=tag
@@ -46,8 +46,8 @@ jobs:
 
       - uses: docker/build-push-action@v6
         with:
-          context: ./docker-premium
-          file: ./docker-premium/Dockerfile
+          context: ./docker-freemium
+          file: ./docker-freemium/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           cache-from: type=gha
