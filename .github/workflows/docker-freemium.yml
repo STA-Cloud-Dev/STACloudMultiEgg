@@ -2,6 +2,10 @@ name: build docker freemium
 run-name: "Build Docker Freemium - ${{ github.event.head_commit.message || github.ref_name }}"
 
 on:
+  push:
+    paths:
+      - "docker-freemium/**"
+      - ".github/workflows/docker-freemium.yml"
   workflow_dispatch:
 
 jobs:

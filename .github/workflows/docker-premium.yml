@@ -2,6 +2,10 @@ name: build docker premium
 run-name: "Build Docker Premium - ${{ github.event.head_commit.message || github.ref_name }}"
 
 on:
+  push:
+    paths:
+      - "docker-premium/**"
+      - ".github/workflows/docker-premium.yml"
   workflow_dispatch:
 
 jobs:
