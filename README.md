@@ -69,6 +69,23 @@ Khi thêm một phiên bản mới vào image có sẵn (ví dụ: python 3.15),
 | .NET 3.1 | `ghcr.io/sta-cloud-dev/deverlopment:dotnet_3.1` | End-of-Life (EOL) |
 | .NET 2.1 | `ghcr.io/sta-cloud-dev/deverlopment:dotnet_2.1` | End-of-Life (EOL) |
 
+### Nodejs
+
+| Phiên bản | Image | Trạng thái |
+|-----------|-------|------------|
+| Nodejs 25 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_25` | Current |
+| Nodejs 24 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_24` | Đang hỗ trợ |
+| Nodejs 23 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_23` | Current |
+| Nodejs 22 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_22` | LTS |
+| Nodejs 21 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_21` | End-of-Life (EOL) |
+| Nodejs 20 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_20` | Maintenance LTS |
+| Nodejs 19 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_19` | End-of-Life (EOL) |
+| Nodejs 18 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_18` | End-of-Life (EOL) |
+| Nodejs 17 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_17` | End-of-Life (EOL) |
+| Nodejs 16 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_16` | End-of-Life (EOL) |
+| Nodejs 14 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_14` | End-of-Life (EOL) |
+| Nodejs 12 | `ghcr.io/sta-cloud-dev/deverlopment:nodejs_12` | End-of-Life (EOL) |
+
 ---
 
 ## Egg Generic
@@ -197,6 +214,38 @@ Pterodactyl Egg tổng quát cho C#/.NET — hỗ trợ chạy dự án từ Git
 
 ```bash
 if [ -d .git ] && [ "{{AUTO_UPDATE}}" = "1" ]; then git pull; fi; cd {{PROJECT_DIR}}; dotnet restore; dotnet run --project {{PROJECT_FILE}}
+```
+
+---
+
+### Nodejs
+
+[nodejs](https://nodejs.org/)
+
+Pterodactyl Egg tổng quát cho Nodejs — hỗ trợ chạy ứng dụng từ Git repo hoặc file tự upload, tự động `npm install` nếu có `package.json`.
+
+#### Cách import Egg
+
+1. Đăng nhập vào **Admin Panel** của Pterodactyl.
+2. Vào **Nests** → chọn hoặc tạo một Nest mới.
+3. Nhấn **Import Egg** và upload file `NodejsGeneric.json`.
+
+#### Biến môi trường
+
+| Biến | Mô tả | Mặc định |
+|------|-------|----------|
+| `JS_FILE` | File Nodejs chính cần chạy | `index.js` |
+| `GIT_ADDRESS` | URL Git repo cần clone | _(trống)_ |
+| `BRANCH` | Branch cần clone | _(trống)_ |
+| `USERNAME` | Tên đăng nhập Git | _(trống)_ |
+| `ACCESS_TOKEN` | Personal Access Token Git | _(trống)_ |
+| `USER_UPLOAD` | Bỏ qua bước clone repo (`0`/`1`) | `0` |
+| `AUTO_UPDATE` | Tự động `git pull` khi khởi động (`0`/`1`) | `0` |
+
+#### Lệnh khởi động mặc định
+
+```bash
+if [ -d .git ] && [ "{{AUTO_UPDATE}}" = "1" ]; then git pull; fi; if [ -f package.json ]; then npm install; fi; node "{{JS_FILE}}"
 ```
 
 ---
