@@ -2,11 +2,6 @@ name: Build & Push Docker image to GHCR
 run-name: "Build Docker Premium • ${{ github.event.head_commit.message || github.ref_name }}"
 
 on:
-  push:
-    branches:
-      - '**'
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 jobs:

@@ -1,9 +1,9 @@
-name: build java
+name: build c
 on:
   workflow_dispatch:
 jobs:
   push:
-    name: "deverlopment:java_${{ matrix.tag }}"
+    name: "deverlopment:dotnet_${{ matrix.tag }}"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -13,25 +13,16 @@ jobs:
       matrix:
         tag:
           - 8
-          - 8j9
-          - 11
-          - 11j9
-          - 16
-          - 16j9
-          - 17
-          - 18
-          - 18j9
-          - 19
-          - 19j9
-          - 21
-          - 21j9
-          - 25
+          - 7
+          - 6
+          - 5
+          - '3.1'
+          - '2.1'
     steps:
       - uses: actions/checkout@v4
       - name: Set registry prefix (lowercase)
         id: registry
         run: echo "owner_lower=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-      # Setup QEMU for ARM64 Build
       - uses: docker/setup-qemu-action@v3
         with:
             image: tonistiigi/binfmt:qemu-v7.0.0-28
@@ -42,16 +33,14 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ steps.registry.outputs.owner_lower }}
-          # Use USER_TOKEN (PAT with write:packages) for org push; fallback to GITHUB_TOKEN
           password: ${{ secrets.USER_TOKEN != '' && secrets.USER_TOKEN || secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
         with:
-          context: ./java
-          file: ./java/${{ matrix.tag }}/Dockerfile
+          context: ./c
+          file: ./c/${{ matrix.tag }}/Dockerfile
           platforms: linux/amd64, linux/arm64
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            ghcr.io/${{ steps.registry.outputs.owner_lower }}/deverlopment:java_${{ matrix.tag }}
-
+            ghcr.io/${{ steps.registry.outputs.owner_lower }}/deverlopment:dotnet_${{ matrix.tag }}

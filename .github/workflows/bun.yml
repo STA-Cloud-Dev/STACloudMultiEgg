@@ -1,13 +1,6 @@
 name: build bun
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 1"
-  push:
-    branches:
-      - main
-    paths:
-      - bun/**
 jobs:
   push:
     name: "deverlopment:bun_${{ matrix.tag }}"
