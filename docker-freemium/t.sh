@@ -3,7 +3,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_BASE_URL="${SCRIPT_BASE_URL:-https://raw.githubusercontent.com/STACloudVN/sta-multiegg/main/docker-image}"
+SCRIPT_BASE_URL="${SCRIPT_BASE_URL:-https://raw.githubusercontent.com/STA-Cloud-Dev/STACloudMultiEgg/main/docker-freemium}"
 
 if [[ -t 1 && "${NO_COLOR:-0}" != "1" ]]; then
   C_RESET=$'\033[0m'

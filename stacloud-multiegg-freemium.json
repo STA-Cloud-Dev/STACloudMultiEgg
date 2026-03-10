@@ -5,12 +5,11 @@
         "update_url": null
     },
     "exported_at": "",
-    "name": "STACloud MultiEgg",
+    "name": "STACloud MultiEgg Freemium",
     "author": "admin@stacloud.vn",
-    "description": "MultiEgg cho STACloud",
+    "description": "Freemium Minecraft multi-egg for STACloud",
     "images": [
-        "ghcr.io/sunshroomchan/sta-multiegg:latest",
-        "ghcr.io/sunshroomchan/sta-multiegg:sha-3c6e996"
+        "ghcr.io/sta-cloud-dev/stacloud-freemium:latest"
     ],
     "file_denylist": [
         "server-icon.png"
@@ -42,12 +41,12 @@
         },
         {
             "name": "Server flavor",
-            "description": "Choose which launcher path to run when MULTIEGG_INTERACTIVE=0. Supported: java, bedrock, proxy.",
+            "description": "Choose which launcher path to run when MULTIEGG_INTERACTIVE=0. Supported: java or bedrock.",
             "env_variable": "SERVER_FLAVOR",
             "default_value": "java",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|in:java,bedrock,proxy",
+            "rules": "required|string|in:java,bedrock",
             "field_type": "text"
         },
         {
@@ -241,46 +240,6 @@
             "field_type": "text"
         },
         {
-            "name": "Bedrock download URL",
-            "description": "Optional direct Bedrock server download URL. Useful if the node cannot reach the official download source.",
-            "env_variable": "BEDROCK_DOWNLOAD_URL",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "nullable|string|max:255",
-            "field_type": "text"
-        },
-        {
-            "name": "PMMP phar file",
-            "description": "PocketMine-MP phar filename when using BEDROCK_SERVER_TYPE=pocketmine.",
-            "env_variable": "PMMP_PHAR_FILE",
-            "default_value": "PocketMine-MP.phar",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:64",
-            "field_type": "text"
-        },
-        {
-            "name": "PMMP phar URL",
-            "description": "Optional PocketMine-MP phar download URL override.",
-            "env_variable": "PMMP_PHAR_URL",
-            "default_value": "https://github.com/pmmp/PocketMine-MP/releases/latest/download/PocketMine-MP.phar",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "nullable|string|max:255",
-            "field_type": "text"
-        },
-        {
-            "name": "PMMP PHP download URL",
-            "description": "Optional custom PHP runtime archive URL for PocketMine-MP. Leave empty to auto-detect from pmmp/PHP-Binaries.",
-            "env_variable": "PMMP_PHP_DOWNLOAD_URL",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "nullable|string|max:255",
-            "field_type": "text"
-        },
-        {
             "name": "Bedrock versions base URL",
             "description": "Metadata source for Bedrock version lookup. Normally this should not be changed.",
             "env_variable": "BEDROCK_VERSIONS_BASE_URL",
@@ -288,36 +247,6 @@
             "user_viewable": false,
             "user_editable": false,
             "rules": "nullable|string|max:255",
-            "field_type": "text"
-        },
-        {
-            "name": "Proxy type",
-            "description": "Proxy software when SERVER_FLAVOR=proxy. Supported: velocity or bungeecord.",
-            "env_variable": "PROXY_TYPE",
-            "default_value": "velocity",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|in:velocity,bungeecord",
-            "field_type": "text"
-        },
-        {
-            "name": "Proxy jar file",
-            "description": "Jar filename used by proxy servers.",
-            "env_variable": "PROXY_JARFILE",
-            "default_value": "proxy.jar",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:64",
-            "field_type": "text"
-        },
-        {
-            "name": "Proxy Java arguments",
-            "description": "Arguments appended after java for proxy startup.",
-            "env_variable": "PROXY_JAVA_ARGUMENTS",
-            "default_value": "-jar ${PROXY_JARFILE}",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "nullable|string|max:500",
             "field_type": "text"
         }
     ]
