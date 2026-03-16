@@ -22,7 +22,7 @@
         "Python 2.7 (EOL)(Alpine)": "ghcr.io/sta-cloud-dev/deverlopment:python_2.7"
     },
     "file_denylist": [],
-    "startup": "if [ -d .git ] && [ \"{{AUTO_UPDATE}}\" = \"1\" ]; then git pull; fi; if [ -n \"{{PY_PACKAGES}}\" ]; then pip install -U --prefix .local {{PY_PACKAGES}}; fi; if [ -f /home/container/${REQUIREMENTS_FILE} ]; then pip install -U --prefix .local -r ${REQUIREMENTS_FILE}; fi; /usr/local/bin/python /home/container/{{PY_FILE}}",
+    "startup": "missing=\"\"; [[ -z \"${GIT_ADDRESS}\" ]] && missing+=\"GIT_ADDRESS \"; [[ -z \"${BRANCH}\" ]] && missing+=\"BRANCH \"; [[ -z \"${USERNAME}\" ]] && missing+=\"USERNAME \"; [[ -z \"${ACCESS_TOKEN}\" ]] && missing+=\"ACCESS_TOKEN \"; if [[ -z \"$missing\" ]]; then AUTH_GIT_URL=\"https://${USERNAME}:${ACCESS_TOKEN}@${GIT_ADDRESS#https://}\"; if [[ ! -d .git ]]; then git clone --branch \"${BRANCH}\" \"${AUTH_GIT_URL}\" .; elif [[ \"${AUTO_UPDATE}\" == \"1\" ]]; then git pull origin \"${BRANCH}\"; fi; else echo \"Skipping git operations, missing variables: $missing\"; fi; if [[ ! -z \"${PY_PACKAGES}\" ]]; then pip install -U --prefix .local ${PY_PACKAGES}; fi; if [[ -f /home/container/${REQUIREMENTS_FILE} ]]; then pip install -U --prefix .local -r /home/container/${REQUIREMENTS_FILE}; fi; /usr/local/bin/python /home/container/${PY_FILE}",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"change this part\"\r\n}",
