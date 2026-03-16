@@ -1,6 +1,8 @@
 name: build python
 on:
   workflow_dispatch:
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   push:
     name: "deverlopment:python_${{ matrix.tag }}"

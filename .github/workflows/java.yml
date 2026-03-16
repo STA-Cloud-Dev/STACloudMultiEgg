@@ -1,6 +1,8 @@
 name: build java
 on:
   workflow_dispatch:
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   push:
     name: "deverlopment:java_${{ matrix.tag }}"

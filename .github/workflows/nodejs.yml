@@ -1,6 +1,8 @@
 name: build nodejs
 on:
   workflow_dispatch:
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   push:
     name: "deverlopment:nodejs_${{ matrix.tag }}"
