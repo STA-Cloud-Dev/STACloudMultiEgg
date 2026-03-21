@@ -1,0 +1,73 @@
+{
+    "_comment": "KHONG CHINH SUA: TEP DUOC TAO BOI STACLOUD",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-03-21T00:00:00+00:00",
+    "name": "OpenClaw",
+    "author": "congdongamazon@gmail.com",
+    "uuid": "8a6c4e15-9c6b-4c7a-9d2e-3f7b2d9a6c51",
+    "description": "Egg OpenClaw cho STACloud, chay OpenClaw Gateway trong Pterodactyl voi persistent state tai /home/container/.openclaw.",
+    "features": null,
+    "docker_images": {
+        "OpenClaw Latest": "ghcr.io/sta-cloud-dev/ai:openclaw_latest"
+    },
+    "file_denylist": [],
+    "startup": "mkdir -p /home/container/.openclaw /home/container/.openclaw/workspace /home/container/.openclaw/skills; export OPENCLAW_HOME=/home/container/.openclaw; export HOME=/home/container; EXTRA_ARGS=\"${OPENCLAW_ARGS}\"; if [ \"${OPENCLAW_VERBOSE}\" = \"true\" ]; then EXTRA_ARGS=\"${EXTRA_ARGS} --verbose\"; fi; if [ -n \"${OPENCLAW_GATEWAY_TOKEN}\" ]; then EXTRA_ARGS=\"${EXTRA_ARGS} --token ${OPENCLAW_GATEWAY_TOKEN}\"; fi; openclaw gateway --allow-unconfigured --bind ${OPENCLAW_BIND} --port {{server.build.default.port}} ${EXTRA_ARGS}",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"listening on\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\r\nmkdir -p /mnt/server/.openclaw /mnt/server/.openclaw/workspace /mnt/server/.openclaw/skills\r\necho \"OpenClaw installation completed.\"",
+            "container": "debian:bookworm-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Gateway verbose",
+            "description": "Enable verbose gateway logs. true = verbose, false = normal.",
+            "env_variable": "OPENCLAW_VERBOSE",
+            "default_value": "true",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        },
+        {
+            "name": "Gateway bind",
+            "description": "Listener bind mode for OpenClaw Gateway.",
+            "env_variable": "OPENCLAW_BIND",
+            "default_value": "lan",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:loopback,lan,tailnet,auto,custom",
+            "field_type": "text"
+        },
+        {
+            "name": "Gateway token",
+            "description": "Token for clients connecting to the OpenClaw Gateway. Required when binding beyond loopback.",
+            "env_variable": "OPENCLAW_GATEWAY_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Extra gateway args",
+            "description": "Additional arguments appended to openclaw gateway.",
+            "env_variable": "OPENCLAW_ARGS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:500",
+            "field_type": "text"
+        }
+    ]
+}
