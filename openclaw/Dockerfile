@@ -20,6 +20,7 @@ ENV USER=container \
 WORKDIR /home/container
 
 COPY entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
 EXPOSE 18789
 
