@@ -12,15 +12,14 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+
 USER container
 ENV USER=container \
     HOME=/home/container \
     NODE_ENV=production \
     OPENCLAW_HOME=/home/container/.openclaw
 WORKDIR /home/container
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod 755 /entrypoint.sh
 
 EXPOSE 18789
 

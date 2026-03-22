@@ -1,9 +1,5 @@
 name: build openclaw
 on:
-  push:
-    paths:
-      - "openclaw/**"
-      - ".github/workflows/openclaw.yml"
   workflow_dispatch:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
