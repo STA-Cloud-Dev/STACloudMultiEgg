@@ -8,10 +8,11 @@
     "name": "Java Generic",
     "author": "congdongamazon@gmail.com",
     "uuid": "2b7e1516-28ae-4d3b-bf2c-9c7ab0f5d001",
-    "description": "Java Generic Egg cho STACloud — hỗ trợ nhiều phiên bản Java từ 8 đến 25, chạy ứng dụng Java từ file JAR.",
+    "description": "Java Generic Egg cho STACloud — hỗ trợ nhiều phiên bản Java từ 8 đến 25, bao gồm Java 22, chạy ứng dụng Java từ file JAR.",
     "features": null,
     "docker_images": {
         "Java 25": "ghcr.io/sta-cloud-dev/deverlopment:java_25",
+        "Java 22": "ghcr.io/sta-cloud-dev/deverlopment:java_22",
         "Java 21": "ghcr.io/sta-cloud-dev/deverlopment:java_21",
         "Java 19": "ghcr.io/sta-cloud-dev/deverlopment:java_19",
         "Java 18": "ghcr.io/sta-cloud-dev/deverlopment:java_18",

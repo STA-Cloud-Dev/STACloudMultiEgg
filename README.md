@@ -56,6 +56,7 @@ Khi thêm một phiên bản mới vào image có sẵn (ví dụ: python 3.15),
 | Java 19 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_19j9` | Đang hỗ trợ |
 | Java 21 | `ghcr.io/sta-cloud-dev/deverlopment:java_21` | Đang hỗ trợ |
 | Java 21 (J9) | `ghcr.io/sta-cloud-dev/deverlopment:java_21j9` | Đang hỗ trợ |
+| Java 22 | `ghcr.io/sta-cloud-dev/deverlopment:java_22` | Đang hỗ trợ |
 | Java 25 | `ghcr.io/sta-cloud-dev/deverlopment:java_25` | Đang hỗ trợ |
 
 ### C# / .NET
@@ -91,6 +92,50 @@ Khi thêm một phiên bản mới vào image có sẵn (ví dụ: python 3.15),
 | Phiên bản | Image | Trạng thái |
 |-----------|-------|------------|
 | Golang 1.24 | `ghcr.io/sta-cloud-dev/deverlopment:golang1.24` | Đang hỗ trợ |
+
+---
+
+## Egg Game
+
+### Minecraft
+
+#### Paper
+
+[Paper](https://papermc.io/)
+
+Pterodactyl Egg dành cho máy chủ Minecraft Paper, dùng image Java của STACloud và script cài đặt tải bản Paper theo phiên bản Minecraft và build number.
+
+#### Cách import Egg
+
+1. Đăng nhập vào **Admin Panel** của Pterodactyl.
+2. Vào **Nests** -> chọn hoặc tạo một Nest mới.
+3. Nhấn **Import Egg** và upload file `egg-paper.json`.
+
+#### Java Images
+
+| Phiên bản | Image |
+|-----------|-------|
+| Java 22 | `ghcr.io/sta-cloud-dev/deverlopment:java_22` |
+| Java 21 | `ghcr.io/sta-cloud-dev/deverlopment:java_21` |
+| Java 17 | `ghcr.io/sta-cloud-dev/deverlopment:java_17` |
+| Java 16 | `ghcr.io/sta-cloud-dev/deverlopment:java_16` |
+| Java 11 | `ghcr.io/sta-cloud-dev/deverlopment:java_11` |
+| Java 8 | `ghcr.io/sta-cloud-dev/deverlopment:java_8` |
+
+#### Biến môi trường
+
+| Biến | Mô tả | Mặc định |
+|------|-------|----------|
+| `MINECRAFT_VERSION` | Phiên bản Minecraft cần tải. Giá trị không hợp lệ sẽ fallback về bản mới nhất. | `latest` |
+| `SERVER_JARFILE` | Tên file jar dùng để khởi động server. | `server.jar` |
+| `BUILD_NUMBER` | Số build của Paper cho phiên bản Minecraft đã chọn. Giá trị không hợp lệ sẽ fallback về build mới nhất. | `latest` |
+| `DL_PATH` | URL tải jar tùy chỉnh thay cho luồng tải mặc định của Paper. | _(trống)_ |
+
+#### Lệnh khởi động mặc định
+
+```bash
+java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}
+```
 
 ---
 
@@ -169,7 +214,7 @@ bun run "{{MAIN_FILE}}"
 
 ### Java
 
-Pterodactyl Egg tổng quát cho Java — hỗ trợ chạy ứng dụng Java từ file JAR với nhiều phiên bản runtime khác nhau (8, 11, 16, 18, 19, 21, 25).
+Pterodactyl Egg tổng quát cho Java — hỗ trợ chạy ứng dụng Java từ file JAR với nhiều phiên bản runtime khác nhau (8, 11, 16, 18, 19, 21, 22, 25).
 
 #### Cách import Egg
 
