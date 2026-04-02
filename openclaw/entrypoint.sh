@@ -66,9 +66,46 @@ OUR_GATEWAY=$(jq -n \
   --argjson custom "$_CUSTOM" \
   '$gw + $cui + $custom + {trustedProxies:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","fc00::/7"]} | .controlUi += {dangerouslyDisableDeviceAuth:true}')
 
+# --- Channels config ---
+_CHANNELS="{}"
+if [ -n "${TELEGRAM_BOT_TOKEN:-}" ]; then
+  _TG_POLICY="${TELEGRAM_DM_POLICY:-open}"
+  _CHANNELS=$(jq -n \
+    --arg token "${TELEGRAM_BOT_TOKEN}" \
+    --arg dm "$_TG_POLICY" \
+    '{telegram:{token:$token,dmPolicy:$dm}}')
+fi
+if [ -n "${DISCORD_BOT_TOKEN:-}" ]; then
+  _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg token "${DISCORD_BOT_TOKEN}" '$ch + {discord:{token:$token}}')
+fi
+if [ -n "${SLACK_BOT_TOKEN:-}" ]; then
+  _SLACK='{token:$token}'
+  if [ -n "${SLACK_SIGNING_SECRET:-}" ]; then
+    _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg token "${SLACK_BOT_TOKEN}" --arg secret "${SLACK_SIGNING_SECRET}" '$ch + {slack:{token:$token,signingSecret:$secret}}')
+  else
+    _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg token "${SLACK_BOT_TOKEN}" '$ch + {slack:{token:$token}}')
+  fi
+fi
+if [ -n "${ZALO_BOT_TOKEN:-}" ]; then
+  _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg token "${ZALO_BOT_TOKEN}" '$ch + {zalo:{token:$token}}')
+fi
+if [ -n "${MSTEAMS_APP_ID:-}" ] && [ -n "${MSTEAMS_APP_PASSWORD:-}" ]; then
+  _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg id "${MSTEAMS_APP_ID}" --arg pw "${MSTEAMS_APP_PASSWORD}" '$ch + {msteams:{appId:$id,appPassword:$pw}}')
+fi
+if [ -n "${MATRIX_HOMESERVER:-}" ] && [ -n "${MATRIX_ACCESS_TOKEN:-}" ]; then
+  _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg hs "${MATRIX_HOMESERVER}" --arg token "${MATRIX_ACCESS_TOKEN}" '$ch + {matrix:{homeserver:$hs,accessToken:$token}}')
+fi
+if [ -n "${LINE_CHANNEL_SECRET:-}" ] && [ -n "${LINE_CHANNEL_ACCESS_TOKEN:-}" ]; then
+  _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg secret "${LINE_CHANNEL_SECRET}" --arg token "${LINE_CHANNEL_ACCESS_TOKEN}" '$ch + {line:{channelSecret:$secret,channelAccessToken:$token}}')
+fi
+if [ -n "${WHATSAPP_SESSION:-}" ]; then
+  _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg session "${WHATSAPP_SESSION}" '$ch + {whatsapp:{session:$session}}')
+fi
+
 OUR_CONFIG=$(jq -n \
   --argjson gw "$OUR_GATEWAY" \
-  '{commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw}')
+  --argjson ch "$_CHANNELS" \
+  '{commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch}')
 
 # --- Ensure env vars are set ---
 export HOME=/home/container

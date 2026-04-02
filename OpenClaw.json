@@ -100,7 +100,16 @@
             "field_type": "text"
         },
         {
-            "name": "Gemini API Key",
+            "name": "Telegram DM Policy",
+            "description": "Who can DM the Telegram bot. 'open' = anyone, 'pairing' = require approval, 'allowlist' = only allowlisted users.",
+            "env_variable": "TELEGRAM_DM_POLICY",
+            "default_value": "open",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:open,pairing,allowlist",
+            "field_type": "text"
+        },
+        {
             "description": "API key for Google Gemini models.",
             "env_variable": "GEMINI_API_KEY",
             "default_value": "",
@@ -323,6 +332,86 @@
             "name": "Zalo Bot Token",
             "description": "Bot token for Zalo channel integration.",
             "env_variable": "ZALO_BOT_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Slack Signing Secret",
+            "description": "Signing secret for Slack (required for event verification).",
+            "env_variable": "SLACK_SIGNING_SECRET",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "MS Teams App ID",
+            "description": "Microsoft Teams bot App ID.",
+            "env_variable": "MSTEAMS_APP_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "MS Teams App Password",
+            "description": "Microsoft Teams bot App Password.",
+            "env_variable": "MSTEAMS_APP_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Matrix Homeserver",
+            "description": "Matrix homeserver URL, e.g. https://matrix.org",
+            "env_variable": "MATRIX_HOMESERVER",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Matrix Access Token",
+            "description": "Matrix bot access token.",
+            "env_variable": "MATRIX_ACCESS_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Line Channel Secret",
+            "description": "LINE Messaging API channel secret.",
+            "env_variable": "LINE_CHANNEL_SECRET",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Line Channel Access Token",
+            "description": "LINE Messaging API channel access token.",
+            "env_variable": "LINE_CHANNEL_ACCESS_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "WhatsApp Session",
+            "description": "WhatsApp session name (for WhatsApp Web JS integration).",
+            "env_variable": "WHATSAPP_SESSION",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
