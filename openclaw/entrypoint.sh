@@ -113,6 +113,32 @@ export HOME=/home/container
 export OPENCLAW_HOME=/home/container
 export XDG_CONFIG_HOME=/home/container/.config
 
+# --- Write auth-profiles.json for agent ---
+AUTH_DIR="/home/container/.openclaw/agents/main/agent"
+AUTH_FILE="$AUTH_DIR/auth-profiles.json"
+mkdir -p "$AUTH_DIR"
+
+_AUTH="{}"
+if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
+  _AUTH=$(jq -n --arg k "${ANTHROPIC_API_KEY}" '{anthropic:{apiKey:$k}}')
+fi
+if [ -n "${OPENAI_API_KEY:-}" ]; then
+  _AUTH=$(jq -n --argjson a "$_AUTH" --arg k "${OPENAI_API_KEY}" '$a + {openai:{apiKey:$k}}')
+fi
+if [ -n "${GEMINI_API_KEY:-}" ]; then
+  _AUTH=$(jq -n --argjson a "$_AUTH" --arg k "${GEMINI_API_KEY}" '$a + {google:{apiKey:$k}}')
+fi
+if [ -n "${GROQ_API_KEY:-}" ]; then
+  _AUTH=$(jq -n --argjson a "$_AUTH" --arg k "${GROQ_API_KEY}" '$a + {groq:{apiKey:$k}}')
+fi
+if [ -n "${XAI_API_KEY:-}" ]; then
+  _AUTH=$(jq -n --argjson a "$_AUTH" --arg k "${XAI_API_KEY}" '$a + {xai:{apiKey:$k}}')
+fi
+if [ -n "${DEEPSEEK_API_KEY:-}" ]; then
+  _AUTH=$(jq -n --argjson a "$_AUTH" --arg k "${DEEPSEEK_API_KEY}" '$a + {deepseek:{apiKey:$k}}')
+fi
+printf '%s\n' "$_AUTH" > "$AUTH_FILE"
+
 # Write config (overwrite, but preserve meta from existing if present)
 CONFIG_FILE="/home/container/.openclaw/openclaw.json"
 mkdir -p /home/container/.openclaw
