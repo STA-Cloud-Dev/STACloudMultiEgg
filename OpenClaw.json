@@ -14,7 +14,7 @@
         "OpenClaw Latest": "ghcr.io/sta-cloud-dev/ai:openclaw_latest"
     },
     "file_denylist": [],
-    "startup": "mkdir -p /home/container/.openclaw /home/container/.openclaw/workspace /home/container/.openclaw/skills; export OPENCLAW_HOME=/home/container/.openclaw; export HOME=/home/container; jq -n --arg token \"${OPENCLAW_GATEWAY_TOKEN}\" --arg origins \"${OPENCLAW_ALLOWED_ORIGINS}\" --arg fallback \"${OPENCLAW_ALLOW_HOST_HEADER_ORIGIN_FALLBACK}\" 'def split_csv: if . == \"\" then [] else split(\",\") | map(gsub(\"^\\\\s+|\\\\s+$\"; \"\")) | map(select(length > 0)) end; ($origins | split_csv) as $originList | (if $token != \"\" then {mode:\"token\",token:$token} else null end) as $authval | (if $authval != null then {auth:$authval} else {} end) as $authblock | (if ($originList | length) > 0 then {allowedOrigins:$originList} else {dangerouslyAllowHostHeaderOriginFallback:($fallback == \"true\")} end) as $cuival | {controlUi:$cuival} as $cuiblock | {commands:{native:\"auto\",nativeSkills:\"auto\",restart:true,ownerDisplay:\"raw\"},gateway:($authblock + $cuiblock)}' > /home/container/.openclaw/openclaw.json; EXTRA_ARGS=\"${OPENCLAW_ARGS}\"; if [ \"${OPENCLAW_VERBOSE}\" = \"true\" ]; then EXTRA_ARGS=\"${EXTRA_ARGS} --verbose\"; fi; if [ -n \"${OPENCLAW_GATEWAY_TOKEN}\" ]; then EXTRA_ARGS=\"${EXTRA_ARGS} --token ${OPENCLAW_GATEWAY_TOKEN}\"; fi; openclaw gateway --allow-unconfigured --bind ${OPENCLAW_BIND} --port ${SERVER_PORT} ${EXTRA_ARGS}",
+    "startup": "openclaw gateway --allow-unconfigured --bind ${OPENCLAW_BIND} --port ${SERVER_PORT}",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"listening on\"\r\n}",
@@ -41,12 +41,22 @@
         },
         {
             "name": "Gateway bind",
-            "description": "Listener bind mode for OpenClaw Gateway.",
+            "description": "Listener bind mode for OpenClaw Gateway. Use 'lan' when behind a reverse proxy like Caddy/Nginx.",
             "env_variable": "OPENCLAW_BIND",
             "default_value": "lan",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:loopback,lan,tailnet,auto,custom",
+            "field_type": "text"
+        },
+        {
+            "name": "Custom bind host",
+            "description": "Required when Gateway bind is set to 'custom'. Enter the hostname or IP to bind to.",
+            "env_variable": "OPENCLAW_CUSTOM_BIND_HOST",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
             "field_type": "text"
         },
         {
