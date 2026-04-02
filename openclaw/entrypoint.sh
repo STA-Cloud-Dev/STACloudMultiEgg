@@ -88,7 +88,7 @@ if [ -n "${TELEGRAM_BOT_TOKEN:-}" ]; then
     --arg gp "$_TG_GROUP_POLICY" \
     --argjson af "$_TG_ALLOW" \
     --argjson gaf "$_TG_GROUP_ALLOW" \
-    '{telegram:{enabled:true,dmPolicy:$dm,allowFrom:$af,groupPolicy:$gp,groupAllowFrom:$gaf}}')
+    '{telegram:{enabled:true,dmPolicy:$dm,allowFrom:$af,groupPolicy:$gp,groups:$gaf}}')
 fi
 if [ -n "${DISCORD_BOT_TOKEN:-}" ]; then
   _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" '$ch + {discord:{enabled:true,dmPolicy:"open",allowFrom:["*"]}}')
@@ -106,7 +106,7 @@ fi
 OUR_CONFIG=$(jq -n \
   --argjson gw "$OUR_GATEWAY" \
   --argjson ch "$_CHANNELS" \
-  '{meta:{},commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch}')
+  '{meta:{},commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch,routing:{rules:[{channel:"*",agentId:"default"}]}}')
 
 # --- Ensure env vars are set ---
 export HOME=/home/container
