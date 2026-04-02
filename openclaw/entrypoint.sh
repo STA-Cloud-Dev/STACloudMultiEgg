@@ -59,7 +59,7 @@ CONFIG_JSON=$(jq -n \
   --argjson gw "$_CONFIG_GATEWAY" \
   --argjson cui "$_CUI" \
   --argjson custom "$_CUSTOM" \
-  '{commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:($gw + $cui + $custom)}')
+  '{commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:($gw + $cui + $custom + {trustedProxies:["private-ranges"]})}')
 
 # --- Ensure env vars are set ---
 export HOME=/home/container
