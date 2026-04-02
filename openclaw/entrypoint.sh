@@ -59,7 +59,7 @@ OUR_GATEWAY=$(jq -n \
   --argjson gw "$_CONFIG_GATEWAY" \
   --argjson cui "$_CUI" \
   --argjson custom "$_CUSTOM" \
-  '$gw + $cui + $custom + {trustedProxies:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","fc00::/7"]}')
+  '$gw + $cui + $custom + {trustedProxies:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","fc00::/7"],pairing:{autoApprove:true,required:false}}')
 
 OUR_CONFIG=$(jq -n \
   --argjson gw "$OUR_GATEWAY" \
@@ -118,9 +118,10 @@ done
 # Auto-approve pairing for this gateway
 if command -v openclaw >/dev/null 2>&1; then
   printf "\033[1m\033[33mstacloud@ai~ \033[0mAuto-pairing...\n"
-  openclaw pair --token "${OPENCLAW_GATEWAY_TOKEN}" --port "${SERVER_PORT}" --yes 2>&1 || \
-  openclaw pair --port "${SERVER_PORT}" --yes 2>&1 || \
-  printf "\033[1m\033[33mstacloud@ai~ \033[0mPairing command not available or failed (may not be needed)\n"
+  openclaw pairing --token "${OPENCLAW_GATEWAY_TOKEN}" --approve-all 2>&1 || \
+  openclaw pairing approve --all 2>&1 || \
+  openclaw pairing --help 2>&1 || \
+  printf "\033[1m\033[33mstacloud@ai~ \033[0mPairing auto-approve not available\n"
 fi
 
 # Wait for gateway process
