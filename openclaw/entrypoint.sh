@@ -81,10 +81,13 @@ printf '%s\n' "$CONFIG_JSON"
 echo
 printf "\033[1m\033[33mstacloud@ai~ \033[0mConfig written to ~/.openclaw/ ~/.config/openclaw/ ~/.config/open-claw/\n"
 
-# Debug: check what openclaw sees
-printf "\033[1m\033[33mstacloud@ai~ \033[0mopenclaw gateway --help (checking available flags):\n"
-openclaw gateway --help 2>&1 | head -30 || true
-echo
+# Debug: find all openclaw config files
+printf "\033[1m\033[33mstacloud@ai~ \033[0mAll openclaw config files:\n"
+find /home/container -name "*.json" -path "*claw*" 2>/dev/null | while read -r f; do
+  printf "=== %s ===\n" "$f"
+  cat "$f"
+  echo
+done
 
 # --- Build gateway args ---
 EXTRA_ARGS="${OPENCLAW_ARGS:-}"
@@ -97,4 +100,27 @@ fi
 
 CMD="openclaw gateway --allow-unconfigured --bind ${OPENCLAW_BIND:-lan} --port ${SERVER_PORT}${EXTRA_ARGS:+ $EXTRA_ARGS}"
 printf "\033[1m\033[33mstacloud@ai~ \033[0m%s\n" "$CMD"
-exec /bin/bash -c "$CMD"
+
+# Run without exec so we can debug after failure
+/bin/bash -c "$CMD"
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+  printf "\033[1m\033[31mstacloud@ai~ \033[0mGateway exited with code %d. Checking config files AFTER run:\n" "$EXIT_CODE"
+  find /home/container -name "*.json" -path "*claw*" 2>/dev/null | while read -r f; do
+    printf "=== %s ===\n" "$f"
+    cat "$f"
+    echo
+  done
+  printf "\033[1m\033[31mstacloud@ai~ \033[0mENV check: HOME=%s OPENCLAW_HOME=%s XDG_CONFIG_HOME=%s\n" "$HOME" "$OPENCLAW_HOME" "$XDG_CONFIG_HOME"
+  
+  # Also check npm global location for default config
+  printf "\033[1m\033[33mstacloud@ai~ \033[0mChecking npm/openclaw paths:\n"
+  which openclaw 2>/dev/null || true
+  ls -la "$(which openclaw 2>/dev/null | xargs dirname 2>/dev/null)/../lib/node_modules/openclaw/" 2>/dev/null | head -5 || true
+  
+  # Check if there's a .openclaw in working directory
+  ls -la /home/container/.openclaw/ 2>/dev/null || true
+fi
+
+exit $EXIT_CODE
