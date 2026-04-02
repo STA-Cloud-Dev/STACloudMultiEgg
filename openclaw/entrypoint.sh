@@ -64,7 +64,7 @@ OUR_GATEWAY=$(jq -n \
   --argjson gw "$_CONFIG_GATEWAY" \
   --argjson cui "$_CUI" \
   --argjson custom "$_CUSTOM" \
-  '$gw + $cui + $custom + {trustedProxies:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","fc00::/7"]} | .controlUi += {dangerouslyDisableDeviceAuth:true}')
+  '$gw + $cui + $custom + {trustedProxies:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","fc00::/7"]} | .controlUi += {dangerouslyDisableDeviceAuth:true,dangerouslyAllowHostHeaderOriginFallback:true}')
 
 # --- Channels config (only dmPolicy, tokens via env vars) ---
 _CHANNELS="{}"
@@ -88,7 +88,7 @@ fi
 OUR_CONFIG=$(jq -n \
   --argjson gw "$OUR_GATEWAY" \
   --argjson ch "$_CHANNELS" \
-  '{commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch}')
+  '{meta:{},commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch}')
 
 # --- Ensure env vars are set ---
 export HOME=/home/container
