@@ -59,7 +59,7 @@ OUR_GATEWAY=$(jq -n \
   --argjson gw "$_CONFIG_GATEWAY" \
   --argjson cui "$_CUI" \
   --argjson custom "$_CUSTOM" \
-  '$gw + $cui + $custom + {trustedProxies:["private-ranges"]}')
+  '$gw + $cui + $custom + {trustedProxies:["10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","fc00::/7"]}')
 
 OUR_CONFIG=$(jq -n \
   --argjson gw "$OUR_GATEWAY" \
@@ -102,4 +102,26 @@ fi
 
 CMD="openclaw gateway --allow-unconfigured --bind ${OPENCLAW_BIND:-lan} --port ${SERVER_PORT}${EXTRA_ARGS:+ $EXTRA_ARGS}"
 printf "\033[1m\033[33mstacloud@ai~ \033[0m%s\n" "$CMD"
-exec /bin/bash -c "$CMD"
+
+# Start gateway in background, auto-pair, then wait
+/bin/bash -c "$CMD" &
+GW_PID=$!
+
+# Wait for gateway to be ready
+for i in $(seq 1 30); do
+  if curl -s -o /dev/null -w '' "http://127.0.0.1:${SERVER_PORT}/__openclaw__/canvas/" 2>/dev/null; then
+    break
+  fi
+  sleep 0.5
+done
+
+# Auto-approve pairing for this gateway
+if command -v openclaw >/dev/null 2>&1; then
+  printf "\033[1m\033[33mstacloud@ai~ \033[0mAuto-pairing...\n"
+  openclaw pair --token "${OPENCLAW_GATEWAY_TOKEN}" --port "${SERVER_PORT}" --yes 2>&1 || \
+  openclaw pair --port "${SERVER_PORT}" --yes 2>&1 || \
+  printf "\033[1m\033[33mstacloud@ai~ \033[0mPairing command not available or failed (may not be needed)\n"
+fi
+
+# Wait for gateway process
+wait $GW_PID
