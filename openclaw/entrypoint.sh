@@ -108,22 +108,7 @@ if [ -n "${WHATSAPP_SESSION:-}" ]; then
   _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" --arg session "${WHATSAPP_SESSION}" '$ch + {whatsapp:{session:$session}}')
 fi
 
-OUR_CONFIG=$(jq -n \
-  --argjson gw "$OUR_GATEWAY" \
-  --argjson ch "$_CHANNELS" \
-  '{meta:{},commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch}')
-
-# --- Ensure env vars are set ---
-export HOME=/home/container
-export OPENCLAW_HOME=/home/container
-export XDG_CONFIG_HOME=/home/container/.config
-
-# --- Write auth-profiles.json for agent (only if env vars provided) ---
-AUTH_DIR="/home/container/.openclaw/agents/main/agent"
-AUTH_FILE="$AUTH_DIR/auth-profiles.json"
-mkdir -p "$AUTH_DIR"
-
-# --- Resolve and write agent model config ---
+# --- Resolve agent model ---
 _RESOLVED_MODEL="${OPENCLAW_AGENT_MODEL:-}"
 if [ -z "$_RESOLVED_MODEL" ]; then
   if [ -n "${XAI_API_KEY:-}" ]; then
@@ -136,12 +121,28 @@ if [ -z "$_RESOLVED_MODEL" ]; then
     _RESOLVED_MODEL="anthropic/claude-opus-4-6"
   fi
 fi
-if [ -n "$_RESOLVED_MODEL" ]; then
-  _MODEL_JSON="$(jq -n --arg model "$_RESOLVED_MODEL" '{model:$model}')"
-  printf '%s\n' "$_MODEL_JSON" > "$AUTH_DIR/agent.json"
-  # Some OpenClaw builds look for config.json in the same directory.
-  printf '%s\n' "$_MODEL_JSON" > "$AUTH_DIR/config.json"
+
+# Build agents block with model if resolved
+_AGENTS="{}"
+if [ -n "${_RESOLVED_MODEL:-}" ]; then
+  _AGENTS=$(jq -n --arg m "$_RESOLVED_MODEL" '{defaults:{model:$m}}')
 fi
+
+OUR_CONFIG=$(jq -n \
+  --argjson gw "$OUR_GATEWAY" \
+  --argjson ch "$_CHANNELS" \
+  --argjson ag "$_AGENTS" \
+  '{meta:{},commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch} + (if $ag != {} then {agents:$ag} else {} end)')
+
+# --- Ensure env vars are set ---
+export HOME=/home/container
+export OPENCLAW_HOME=/home/container
+export XDG_CONFIG_HOME=/home/container/.config
+
+# --- Write auth-profiles.json for agent (only if env vars provided) ---
+AUTH_DIR="/home/container/.openclaw/agents/main/agent"
+AUTH_FILE="$AUTH_DIR/auth-profiles.json"
+mkdir -p "$AUTH_DIR"
 
 _AUTH="{}"
 if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
