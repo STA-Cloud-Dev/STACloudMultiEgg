@@ -71,13 +71,16 @@ _CHANNELS="{}"
 if [ -n "${TELEGRAM_BOT_TOKEN:-}" ]; then
   _TG_DM="${TELEGRAM_DM_POLICY:-open}"
   _TG_GROUP_POLICY="${TELEGRAM_GROUP_POLICY:-open}"
-  # Build dmAllowFrom array — only ["*"] when policy is "open"
+  # Build dmAllowFrom array — ["*"] for open and pairing, specific IDs for allowlist
   if [ -n "${TELEGRAM_ALLOW_FROM:-}" ]; then
     _TG_ALLOW=$(jq -n --arg v "${TELEGRAM_ALLOW_FROM}" '[$v | split(",") | .[] | gsub("^\\s+|\\s+$";"") | select(length>0)]')
-  elif [ "$_TG_DM" = "open" ]; then
-    _TG_ALLOW='["*"]'
   else
-    _TG_ALLOW='[]'
+    # For open and pairing, allow execution; for allowlist, restrict
+    if [ "$_TG_DM" = "allowlist" ]; then
+      _TG_ALLOW='[]'
+    else
+      _TG_ALLOW='["*"]'
+    fi
   fi
   # Build groups object {"id": {}}
   if [ "$_TG_GROUP_POLICY" = "allowlist" ] && [ -n "${TELEGRAM_GROUP_ALLOW_FROM:-}" ]; then
