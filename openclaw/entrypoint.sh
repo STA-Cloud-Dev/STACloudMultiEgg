@@ -93,7 +93,7 @@ if [ -n "${TELEGRAM_BOT_TOKEN:-}" ]; then
     --arg gp "$_TG_GROUP_POLICY" \
     --argjson af "$_TG_ALLOW" \
     --argjson gaf "$_TG_GROUP_ALLOW" \
-    '{telegram:{enabled:true,dmPolicy:$dm,allowFrom:$af,groupPolicy:$gp,groups:$gaf}}')
+    '{telegram:{enabled:true,dmPolicy:$dm,allowFrom:$af,groupPolicy:$gp,groups:$gaf,actions:{reactions:true,sendMessage:true},mediaMaxMb:100}}')
 fi
 if [ -n "${DISCORD_BOT_TOKEN:-}" ]; then
   _CHANNELS=$(jq -n --argjson ch "$_CHANNELS" '$ch + {discord:{enabled:true,dmPolicy:"open",allowFrom:["*"]}}')
@@ -132,7 +132,7 @@ OUR_CONFIG=$(jq -n \
   --argjson gw "$OUR_GATEWAY" \
   --argjson ch "$_CHANNELS" \
   --argjson ag "$_AGENTS" \
-  '{meta:{},commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch} + (if $ag != {} then {agents:$ag} else {} end)')
+  '{meta:{},commands:{native:"auto",nativeSkills:"auto",restart:true,ownerDisplay:"raw"},gateway:$gw,channels:$ch,tools:{profile:"coding"}} + (if $ag != {} then {agents:$ag} else {} end)')
 
 # --- Ensure env vars are set ---
 export HOME=/home/container
