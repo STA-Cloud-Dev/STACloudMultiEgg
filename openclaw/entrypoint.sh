@@ -123,6 +123,11 @@ AUTH_DIR="/home/container/.openclaw/agents/main/agent"
 AUTH_FILE="$AUTH_DIR/auth-profiles.json"
 mkdir -p "$AUTH_DIR"
 
+# --- Write agent model config when explicitly provided ---
+if [ -n "${OPENCLAW_AGENT_MODEL:-}" ]; then
+  printf '%s\n' "$(jq -n --arg model "${OPENCLAW_AGENT_MODEL}" '{model:$model}')" > "$AUTH_DIR/agent.json"
+fi
+
 _AUTH="{}"
 if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
   _AUTH=$(jq -n --argjson a "$_AUTH" --arg k "${ANTHROPIC_API_KEY}" '$a + {anthropic:{apiKey:$k}}')
