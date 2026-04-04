@@ -11,7 +11,8 @@
     "description": "Egg OpenClaw cho STACloud, chay OpenClaw Gateway trong Pterodactyl voi persistent state tai /home/container/.openclaw.",
     "features": null,
     "docker_images": {
-        "OpenClaw Latest": "ghcr.io/sta-cloud-dev/ai:openclaw_latest"
+        "OpenClaw Latest": "ghcr.io/sta-cloud-dev/ai:openclaw_latest",
+        "OpenClaw Latest New": "ghcr.io/sta-cloud-dev/ai:openclaw_latest"
     },
     "file_denylist": [],
     "startup": "openclaw gateway --allow-unconfigured --bind ${OPENCLAW_BIND} --port ${SERVER_PORT}",
