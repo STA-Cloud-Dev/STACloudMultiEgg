@@ -3,7 +3,12 @@ set -e
 
 cd /home/container || exit 1
 
-RUNTIME_ROOT="${OPENCLAW_RUNTIME_ROOT:-/home/container/.openclaw/runtime}"
+STATE_DIR="${OPENCLAW_STATE_DIR:-/home/container/.openclaw}"
+CONFIG_FILE="${OPENCLAW_CONFIG_PATH:-${STATE_DIR}/openclaw.json}"
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-/home/container/.config}"
+XDG_OPENCLAW_DIR="${XDG_CONFIG_HOME}/openclaw"
+XDG_CONFIG_FILE="${XDG_OPENCLAW_DIR}/config.json5"
+RUNTIME_ROOT="${OPENCLAW_RUNTIME_ROOT:-${STATE_DIR}/runtime}"
 RUNTIME_PREFIX="${RUNTIME_ROOT}/npm-global"
 RUNTIME_CACHE="${RUNTIME_ROOT}/npm-cache"
 RUNTIME_BIN="${RUNTIME_PREFIX}/bin/openclaw"
@@ -11,7 +16,7 @@ IMAGE_OPENCLAW_BIN="$(command -v openclaw || true)"
 ACTIVE_OPENCLAW_BIN="${IMAGE_OPENCLAW_BIN}"
 OPENCLAW_PACKAGE_TARGET="${OPENCLAW_UPDATE_OPENCLAW_VERSION:-${OPENCLAW_UPDATE_CHANNEL:-latest}}"
 
-mkdir -p "$RUNTIME_ROOT" "$RUNTIME_PREFIX" "$RUNTIME_CACHE"
+mkdir -p "$STATE_DIR" "$RUNTIME_ROOT" "$RUNTIME_PREFIX" "$RUNTIME_CACHE" "$XDG_OPENCLAW_DIR"
 
 openclaw_version_of() {
   local bin_path="$1"
@@ -32,9 +37,9 @@ if [ -n "${NODE_OPTIONS_MAX_OLD_SPACE:-}" ]; then
 fi
 
 mkdir -p \
-  /home/container/.openclaw \
-  /home/container/.openclaw/workspace \
-  /home/container/.openclaw/skills \
+  "$STATE_DIR" \
+  "${STATE_DIR}/workspace" \
+  "${STATE_DIR}/skills" \
   "$RUNTIME_ROOT"
 
 if [ "${OPENCLAW_AUTO_UPDATE:-true}" = "true" ]; then
@@ -176,9 +181,9 @@ fi
 # Build agents block with model if resolved
 _AGENTS="{}"
 if [ -n "${_RESOLVED_MODEL:-}" ]; then
-  _AGENTS=$(jq -n --arg m "$_RESOLVED_MODEL" '{defaults:{model:$m,workspace:"/home/container/.openclaw/workspace",mediaMaxMb:100}}')
+  _AGENTS=$(jq -n --arg m "$_RESOLVED_MODEL" --arg workspace "${STATE_DIR}/workspace" '{defaults:{model:$m,workspace:$workspace,mediaMaxMb:100}}')
 else
-  _AGENTS=$(jq -n '{defaults:{workspace:"/home/container/.openclaw/workspace",mediaMaxMb:100}}')
+  _AGENTS=$(jq -n --arg workspace "${STATE_DIR}/workspace" '{defaults:{workspace:$workspace,mediaMaxMb:100}}')
 fi
 
 OUR_CONFIG=$(jq -n \
@@ -189,11 +194,13 @@ OUR_CONFIG=$(jq -n \
 
 # --- Ensure env vars are set ---
 export HOME=/home/container
-export OPENCLAW_HOME=/home/container/.openclaw
-export XDG_CONFIG_HOME=/home/container/.config
+export OPENCLAW_HOME="$STATE_DIR"
+export OPENCLAW_STATE_DIR="$STATE_DIR"
+export OPENCLAW_CONFIG_PATH="$CONFIG_FILE"
+export XDG_CONFIG_HOME="$XDG_CONFIG_HOME"
 
 # --- Write auth-profiles.json for agent (only if env vars provided) ---
-AUTH_DIR="/home/container/.openclaw/agents/main/agent"
+AUTH_DIR="${STATE_DIR}/agents/main/agent"
 AUTH_FILE="$AUTH_DIR/auth-profiles.json"
 mkdir -p "$AUTH_DIR"
 
@@ -229,8 +236,7 @@ if [ "$_AUTH" != "{}" ]; then
 fi
 
 # Write config (overwrite, but preserve meta from existing if present)
-CONFIG_FILE="/home/container/.openclaw/openclaw.json"
-mkdir -p /home/container/.openclaw
+mkdir -p "$STATE_DIR" "$XDG_OPENCLAW_DIR"
 
 if [ -f "$CONFIG_FILE" ]; then
   # Only preserve meta from existing config; gateway settings fully replaced by ours
@@ -244,7 +250,13 @@ else
   printf '%s\n' "$OUR_CONFIG" > "$CONFIG_FILE"
 fi
 
-printf "\033[1m\033[33mstacloud@ai~ \033[0mFinal /home/container/.openclaw/openclaw.json:\n"
+# Mirror to the XDG config location as a symlink for builds that prefer ~/.config/openclaw/config.json5.
+ln -sfn "$CONFIG_FILE" "$XDG_CONFIG_FILE"
+
+printf "\033[1m\033[33mstacloud@ai~ \033[0mUsing OPENCLAW_STATE_DIR=%s\n" "$OPENCLAW_STATE_DIR"
+printf "\033[1m\033[33mstacloud@ai~ \033[0mUsing OPENCLAW_CONFIG_PATH=%s\n" "$OPENCLAW_CONFIG_PATH"
+printf "\033[1m\033[33mstacloud@ai~ \033[0mMirrored XDG config=%s -> %s\n" "$XDG_CONFIG_FILE" "$CONFIG_FILE"
+printf "\033[1m\033[33mstacloud@ai~ \033[0mFinal %s:\n" "$CONFIG_FILE"
 cat "$CONFIG_FILE"
 echo
 
