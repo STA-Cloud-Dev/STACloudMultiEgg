@@ -41,6 +41,26 @@
             "field_type": "text"
         },
         {
+            "name": "Auto update OpenClaw",
+            "description": "Automatically check npm on every startup and install the newest OpenClaw runtime into writable server storage.",
+            "env_variable": "OPENCLAW_AUTO_UPDATE",
+            "default_value": "true",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        },
+        {
+            "name": "OpenClaw update version",
+            "description": "Version target to install at startup. Use 'latest' for newest builds or pin a version like '2026.4.2'.",
+            "env_variable": "OPENCLAW_UPDATE_OPENCLAW_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:64",
+            "field_type": "text"
+        },
+        {
             "name": "Gateway bind",
             "description": "Listener bind mode for OpenClaw Gateway. Use 'lan' when behind a reverse proxy like Caddy/Nginx.",
             "env_variable": "OPENCLAW_BIND",

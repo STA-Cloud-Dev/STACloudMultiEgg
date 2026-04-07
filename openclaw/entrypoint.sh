@@ -3,6 +3,29 @@ set -e
 
 cd /home/container || exit 1
 
+RUNTIME_ROOT="${OPENCLAW_RUNTIME_ROOT:-/home/container/.openclaw/runtime}"
+RUNTIME_PREFIX="${RUNTIME_ROOT}/npm-global"
+RUNTIME_CACHE="${RUNTIME_ROOT}/npm-cache"
+RUNTIME_BIN="${RUNTIME_PREFIX}/bin/openclaw"
+IMAGE_OPENCLAW_BIN="$(command -v openclaw || true)"
+ACTIVE_OPENCLAW_BIN="${IMAGE_OPENCLAW_BIN}"
+OPENCLAW_PACKAGE_TARGET="${OPENCLAW_UPDATE_OPENCLAW_VERSION:-${OPENCLAW_UPDATE_CHANNEL:-latest}}"
+
+mkdir -p "$RUNTIME_ROOT" "$RUNTIME_PREFIX" "$RUNTIME_CACHE"
+
+openclaw_version_of() {
+  local bin_path="$1"
+  if [ -x "$bin_path" ]; then
+    "$bin_path" --version 2>/dev/null | head -n 1 | tr -d '\r'
+  fi
+}
+
+install_openclaw_runtime() {
+  NPM_CONFIG_PREFIX="$RUNTIME_PREFIX" \
+  NPM_CONFIG_CACHE="$RUNTIME_CACHE" \
+  npm install -g "openclaw@${OPENCLAW_PACKAGE_TARGET}"
+}
+
 # Set Node.js memory limit
 if [ -n "${NODE_OPTIONS_MAX_OLD_SPACE:-}" ]; then
   export NODE_OPTIONS="--max-old-space-size=${NODE_OPTIONS_MAX_OLD_SPACE}"
@@ -11,10 +34,38 @@ fi
 mkdir -p \
   /home/container/.openclaw \
   /home/container/.openclaw/workspace \
-  /home/container/.openclaw/skills
+  /home/container/.openclaw/skills \
+  "$RUNTIME_ROOT"
 
-printf "\033[1m\033[33mstacloud@ai~ \033[0mopenclaw --version\n"
-openclaw --version
+if [ "${OPENCLAW_AUTO_UPDATE:-true}" = "true" ]; then
+  printf "\033[1m\033[33mstacloud@ai~ \033[0mChecking OpenClaw updates from npm (%s)\n" "${OPENCLAW_PACKAGE_TARGET}"
+  LATEST_OPENCLAW_VERSION="$(npm view "openclaw@${OPENCLAW_PACKAGE_TARGET}" version --silent 2>/dev/null | tail -n 1 | tr -d '\r')"
+  CURRENT_RUNTIME_VERSION="$(openclaw_version_of "$RUNTIME_BIN")"
+
+  if [ -n "${LATEST_OPENCLAW_VERSION:-}" ]; then
+    if [ "$CURRENT_RUNTIME_VERSION" != "$LATEST_OPENCLAW_VERSION" ]; then
+      printf "\033[1m\033[33mstacloud@ai~ \033[0mUpdating OpenClaw runtime %s -> %s\n" "${CURRENT_RUNTIME_VERSION:-none}" "$LATEST_OPENCLAW_VERSION"
+      install_openclaw_runtime
+      hash -r
+    else
+      printf "\033[1m\033[33mstacloud@ai~ \033[0mOpenClaw runtime already at %s\n" "$CURRENT_RUNTIME_VERSION"
+    fi
+  elif [ -x "$RUNTIME_BIN" ]; then
+    printf "\033[1m\033[33mstacloud@ai~ \033[0mCould not reach npm, using cached OpenClaw runtime %s\n" "${CURRENT_RUNTIME_VERSION:-unknown}"
+  else
+    printf "\033[1m\033[33mstacloud@ai~ \033[0mCould not reach npm and no cached runtime found; using bundled OpenClaw\n"
+  fi
+fi
+
+if [ -x "$RUNTIME_BIN" ]; then
+  export NPM_CONFIG_PREFIX="$RUNTIME_PREFIX"
+  export NPM_CONFIG_CACHE="$RUNTIME_CACHE"
+  export PATH="$RUNTIME_PREFIX/bin:$PATH"
+  ACTIVE_OPENCLAW_BIN="$RUNTIME_BIN"
+fi
+
+printf "\033[1m\033[33mstacloud@ai~ \033[0m%s --version\n" "$ACTIVE_OPENCLAW_BIN"
+"$ACTIVE_OPENCLAW_BIN" --version
 
 # --- Generate openclaw.json config ---
 IFS=',' read -ra _ORIGINS_ARR <<< "${OPENCLAW_ALLOWED_ORIGINS:-}"
@@ -138,7 +189,7 @@ OUR_CONFIG=$(jq -n \
 
 # --- Ensure env vars are set ---
 export HOME=/home/container
-export OPENCLAW_HOME=/home/container
+export OPENCLAW_HOME=/home/container/.openclaw
 export XDG_CONFIG_HOME=/home/container/.config
 
 # --- Write auth-profiles.json for agent (only if env vars provided) ---
@@ -206,6 +257,6 @@ if [ -n "${OPENCLAW_GATEWAY_TOKEN:-}" ]; then
   EXTRA_ARGS="${EXTRA_ARGS} --token ${OPENCLAW_GATEWAY_TOKEN}"
 fi
 
-CMD="openclaw gateway --allow-unconfigured --bind ${OPENCLAW_BIND:-lan} --port ${SERVER_PORT}${EXTRA_ARGS:+ $EXTRA_ARGS}"
+CMD="${ACTIVE_OPENCLAW_BIN} gateway --allow-unconfigured --bind ${OPENCLAW_BIND:-lan} --port ${SERVER_PORT}${EXTRA_ARGS:+ $EXTRA_ARGS}"
 printf "\033[1m\033[33mstacloud@ai~ \033[0m%s\n" "$CMD"
 exec /bin/bash -c "$CMD"
