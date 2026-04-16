@@ -6,7 +6,7 @@
     },
     "exported_at": "2025-11-04T04:34:52+00:00",
     "name": "Fabric",
-    "author": "congdongamazon@gmail.com",
+    "author": "stacloud.dev@gmail.com",
     "description": "Fabric is a modular modding toolchain targeting Minecraft 1.14 and above, including snapshots.",
     "features": [
         "eula",

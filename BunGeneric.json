@@ -6,7 +6,7 @@
     },
     "exported_at": "2026-03-03T00:00:00+00:00",
     "name": "Bun Generic",
-    "author": "congdongamazon@gmail.com",
+    "author": "stacloud.dev@gmail.com",
     "uuid": "a1b2c3d4-58cc-4372-b678-1f03c3d4e580",
     "description": "Bun Generic Egg cho STACloud — hỗ trợ Bun latest và canary, chạy ứng dụng JavaScript/TypeScript từ Git repo hoặc file upload.",
     "features": null,

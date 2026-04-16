@@ -6,7 +6,7 @@
     },
     "exported_at": "",
     "name": "STACloud MultiEgg Freemium",
-    "author": "congdongamazon@gmail.com",
+    "author": "stacloud.dev@gmail.com",
     "description": "Freemium Minecraft multi-egg for STACloud",
     "images": [
         "ghcr.io/sta-cloud-dev/stacloud-freemium:latest"

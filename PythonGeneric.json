@@ -6,7 +6,7 @@
     },
     "exported_at": "2026-02-28T00:00:00+00:00",
     "name": "Python Generic",
-    "author": "congdongamazon@gmail.com",
+    "author": "stacloud.dev@gmail.com",
     "uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     "description": "Python Generic Egg cho STACloud — hỗ trợ nhiều phiên bản Python từ 2.7 đến 3.14, chạy ứng dụng Python từ Git repo hoặc file upload.",
     "features": null,
